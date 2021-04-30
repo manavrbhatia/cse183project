@@ -1,0 +1,69 @@
+timestamp: 2021-04-20T11:39:09.161947
+CREATE TABLE "auth_user"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "username" CHAR(512) UNIQUE,
+    "email" CHAR(512) UNIQUE,
+    "password" CHAR(512),
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "sso_id" CHAR(512),
+    "action_token" CHAR(512),
+    "last_password_change" TIMESTAMP,
+    "past_passwords_hash" TEXT
+);
+success!
+timestamp: 2021-04-20T11:39:09.164370
+CREATE TABLE "auth_user_tag_groups"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "path" CHAR(512),
+    "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
+);
+success!
+timestamp: 2021-04-30T13:54:28.160865
+CREATE TABLE "user"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_email" CHAR(512),
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "age" INTEGER,
+    "location" CHAR(512)
+);
+success!
+timestamp: 2021-04-30T13:54:48.939906
+CREATE TABLE "propertyManager"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name" CHAR(512),
+    "city" CHAR(512),
+    "state" CHAR(512),
+    "zip" INTEGER,
+    "bio" CHAR(512)
+);
+success!
+timestamp: 2021-04-30T13:54:48.942253
+CREATE TABLE "reviews"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "property_manager_id" INTEGER REFERENCES "propertyManager" ("id") ON DELETE CASCADE  ,
+    "content" CHAR(512),
+    "upvotes" INTEGER,
+    "downvotes" INTEGER,
+    "user_id" INTEGER REFERENCES "user" ("id") ON DELETE CASCADE  
+);
+success!
+success!
+success!
+success!
+timestamp: 2021-04-30T14:10:08.930605
+CREATE TABLE "savedReviews"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER REFERENCES "user" ("id") ON DELETE CASCADE  ,
+    "review_id" INTEGER REFERENCES "reviews" ("id") ON DELETE CASCADE  
+);
+success!
+timestamp: 2021-04-30T14:10:08.932735
+CREATE TABLE "userRatingReview"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER REFERENCES "user" ("id") ON DELETE CASCADE  ,
+    "review_id" INTEGER REFERENCES "reviews" ("id") ON DELETE CASCADE  ,
+    "upvoted" CHAR(1)
+);
+success!
