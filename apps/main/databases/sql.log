@@ -67,3 +67,4 @@ CREATE TABLE "userRatingReview"(
     "upvoted" CHAR(1)
 );
 success!
+success!
