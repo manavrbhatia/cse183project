@@ -1,0 +1,59 @@
+[[extend "layout.html"]]
+
+<style>
+    [v-cloak] {
+         display: none;
+    }
+</style>
+
+<div class="section" id="vue-target" v-cloak>
+<section class="section">
+    <nav class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <a class="button is-medium" href="[[=URL('index')]]" style="border-radius: 100%;">
+                    <span class="icon"><i class="fa fa-chevron-left"></i></span>
+                </a>
+            </div>
+        </div>
+        <div class="level-item has-text-centered">
+            <h1 class="title">Search Results</h1>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <a class="button is-medium" href="[[=URL('index')]]" style="border-radius: 100%;">
+                    <span class="icon"><i class="fa fa-filter"></i></span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</section>
+<section class="section">
+    <div v-for="m in manager_list" class="box">
+        <div class="box">
+            <img src="https://via.placeholder.com/150">
+        </div>
+        <div class="columns">
+            <div class="column is-half">
+                <h2 class="title is-4">Blue Sky Property Managment</h2>
+                <h3 class="subtitle">877 Cedar St Suite E, Santa Cruz, CA</h3>
+            </div>
+            <div class="column is-offset-5">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+
+[[block page_scripts]]
+<!-- Loads the index-specific js for Vue -->
+<script>
+  let my_callback_url = "[[=XML(my_callback_url)]]";
+</script>
+<script src="js/index.js"></script>
+[[end]]

@@ -9,7 +9,7 @@ let init = (app) => {
 
     // This is the Vue data.
     app.data = {
-        // Complete as you see fit.
+        manager_list: [],
     };
 
     app.enumerate = (a) => {
@@ -34,8 +34,10 @@ let init = (app) => {
 
     // And this initializes it.
     app.init = () => {
-        // Put here any initialization code.
-        // Typically this is a server GET call to load the data.
+        // axios.get(load_search_results_url).then(function(response) {
+        //     app.vue.manager_list = app.enumerate(response.data.manager_list);
+        // });
+        console.log(app.vue.manager_list);
     };
 
     // Call to the initializer.
