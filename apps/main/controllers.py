@@ -45,7 +45,7 @@ def index():
 @action('results')
 @action.uses(db, auth, 'results.html')
 def results():
-    return dict(my_callback_url = URL('my_callback', signer=url_signer),)
+    return dict(my_callback_url = URL('my_callback', signer=url_signer),load_search_results_url = URL('load_results', signer=url_signer),)
 
 @action('load_results')
 @action.uses(url_signer.verify(), db)

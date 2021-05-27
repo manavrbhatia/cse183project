@@ -35,8 +35,8 @@
         </div>
         <div class="columns">
             <div class="column is-half">
-                <h2 class="title is-4">Blue Sky Property Managment</h2>
-                <h3 class="subtitle">877 Cedar St Suite E, Santa Cruz, CA</h3>
+                <h2 class="title is-4">{{m.name}}</h2>
+                <h3 class="subtitle">{{m.city}}, {{m.state}} {{m.zip}}</h3>
             </div>
             <div class="column is-offset-5">
                 <i class="fa fa-star"></i>
@@ -54,6 +54,7 @@
 <!-- Loads the index-specific js for Vue -->
 <script>
   let my_callback_url = "[[=XML(my_callback_url)]]";
+  let load_search_results_url = "[[=XML(load_search_results_url)]]";
 </script>
 <script src="js/index.js"></script>
 [[end]]
