@@ -31,6 +31,9 @@ from .common import db, session, T, cache, auth, logger, authenticated, unauthen
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
 
+import uuid
+import random
+
 url_signer = URLSigner(session)
 
 @action('index')
@@ -40,12 +43,34 @@ def index():
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
         load_search_results_url = URL('load_results', signer=url_signer),
+        results_url = URL('results', signer=url_signer),
+        search_url=URL('search', signer=url_signer),
     )
 
-@action('results')
+@action('search', method=["GET"])
+@action.uses('results.html', url_signer.verify())
+def search():
+    q = request.params.get("q")
+    is_address = request.params.get("is_address")
+    redirect(URL('t'))
+    # redirect(URL('results', q, is_address)) #also need type
+    # return "ok"
+
+@action('t')
+@action.uses()
+def t():
+    pass
+
+@action('results/<query>/<is_address:int>', method=["GET"])
 @action.uses(db, auth, 'results.html')
-def results():
-    return dict(my_callback_url = URL('my_callback', signer=url_signer),load_search_results_url = URL('load_results', signer=url_signer),)
+def results(query=None, is_address=None): # add flag for city/manager as param
+    assert query is not None and is_address is not None
+    print(query)
+    print(is_address)
+    return dict(my_callback_url = URL('my_callback', signer=url_signer),
+    load_search_results_url = URL('load_results', signer=url_signer),
+    query=query,
+    is_address=is_address)
 
 @action('load_results')
 @action.uses(url_signer.verify(), db)

@@ -28,7 +28,7 @@
         </div>
     </nav>
 </section>
-<section class="section">
+<!-- <section class="section">
     <div v-for="m in manager_list" class="box">
         <div class="box">
             <img src="https://via.placeholder.com/150">
@@ -47,7 +47,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 </div>
 
 [[block page_scripts]]
@@ -55,6 +55,7 @@
 <script>
   let my_callback_url = "[[=XML(my_callback_url)]]";
   let load_search_results_url = "[[=XML(load_search_results_url)]]";
+  let query = "[[=query]]";
 </script>
 <script src="js/index.js"></script>
 [[end]]
