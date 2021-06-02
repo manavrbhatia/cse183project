@@ -113,11 +113,11 @@ let init = (app) => {
 
     // And this initializes it.
     app.init = () => {
-        axios.get(load_search_results_url, {params: {q: query, is_address: is_address}}).then(function(response) {
-            app.vue.manager_list = app.enumerate(response.data.manager_list);
-            axios.get(load_posts_url).then(function (response) {
-                app.vue.rows = app.enumerate(response.data.rows);
-                console.log(app.vue.rows);
+        axios.get(load_posts_url).then(function (response) {
+            app.vue.rows = app.enumerate(response.data.rows);
+            console.log(app.vue.rows);
+            axios.get(load_search_results_url, {params: {q: query, is_address: is_address}}).then(function(response) {
+                app.vue.manager_list = app.enumerate(response.data.manager_list);
             });
         });
         console.log("INIT APP");
