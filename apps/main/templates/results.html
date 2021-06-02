@@ -28,8 +28,8 @@
         </div>
     </nav>
 </section>
-<!-- <section class="section">
-    <div v-for="m in manager_list" class="box">
+<section class="section">
+    <div v-for="m in manager_list" class="box" @click="propertyPage(m.id)">
         <div class="box">
             <img src="https://via.placeholder.com/150">
         </div>
@@ -47,7 +47,7 @@
             </div>
         </div>
     </div>
-</section> -->
+</section>
 </div>
 
 [[block page_scripts]]
@@ -56,6 +56,9 @@
   let my_callback_url = "[[=XML(my_callback_url)]]";
   let load_search_results_url = "[[=XML(load_search_results_url)]]";
   let query = "[[=query]]";
+  let property_url = "[[=XML(property_url)]]";
+  let load_property_url = "[[=XML(load_property_url)]]";
+  let load_posts_url = "[[=XML(load_posts_url)]]";
 </script>
 <script src="js/index.js"></script>
 [[end]]

@@ -12,7 +12,12 @@ let init = (app) => {
         manager_list: [],
         query: "",
         results: [],
-        show_address: 1
+        show_address: 1,
+        post_mode: false,
+        add_content: "",
+        content_stars: "",
+        managerID: 1,
+        rows: [],
     };
 
     app.enumerate = (a) => {
@@ -36,6 +41,44 @@ let init = (app) => {
         }
     };
 
+    app.set_post_status = function (new_status) {
+        app.vue.post_mode = new_status;
+    };
+
+    app.reset_form = function () {
+        app.vue.add_content = "";
+        app.vue.content_stars = "";
+    };
+
+    app.add_post = function () {
+        axios.post(add_post_url,
+            {
+                content: app.vue.add_content,
+                stars: app.vue.content_stars,
+                mid: app.vue.managerID,
+            }).then(
+                function (response){
+                    app.vue.rows.push({
+                        id: response.data.id,
+                        content: app.vue.add_content,
+                        stars: app.vue.content_stars,
+                        mid: app.vue.managerID,
+                        email: response.data.email,
+                    });
+                    app.enumerate(app.vue.rows);
+                    app.reset_form();
+                    app.set_post_status(false);
+                });
+    };
+
+    app.propertyPage = function(id) {
+        console.log(id);
+        app.vue.managerID = id;
+        console.log(app.vue.managerID);
+        console.log(app.vue.rows);
+        axios.post(property_url);
+    }
+
     app.toggle_address = function (new_status) {
         app.vue.show_address = new_status;
     };
@@ -44,7 +87,10 @@ let init = (app) => {
     app.methods = {
         // Complete as you see fit.
         search: app.search,
-        toggle_address: app.toggle_address
+        toggle_address: app.toggle_address,
+        propertyPage: app.propertyPage,
+        set_post_status: app.set_post_status,
+        add_post: app.add_post,
     };
 
     // This creates the Vue instance.
@@ -56,10 +102,14 @@ let init = (app) => {
 
     // And this initializes it.
     app.init = () => {
-        // axios.get(load_search_results_url, {params: {query=query}}).then(function(response) {
-        //     app.vue.manager_list = app.enumerate(response.data.manager_list);
-        // });
-        console.log(app.vue.manager_list);
+        axios.get(load_search_results_url).then(function(response) {
+            app.vue.manager_list = app.enumerate(response.data.manager_list);
+            axios.get(load_posts_url).then(function (response) {
+                app.vue.rows = app.enumerate(response.data.rows);
+                console.log(app.vue.rows);
+            });
+        });
+        console.log("INIT APP");
     };
 
     // Call to the initializer.

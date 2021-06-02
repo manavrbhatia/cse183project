@@ -1,0 +1,86 @@
+[[extend "layout.html"]]
+
+<style>
+    [v-cloak] {
+         display: none;
+    }
+</style>
+
+<div class="section" id="vue-target" v-cloak>
+    <section class="section">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <h1 class="title is-2">[[=name]]</h1>
+            </div>
+        </nav>
+        <div class="level-item has-text-centered">
+            <h2 class="subtitle">[[=city]] [[=state]], [[=zip]]</h2>
+        </div>
+    </section>
+    <section>
+        <h1 class="title">Reviews</h1>
+        <nav class="level">
+            <div class="level-item">
+                <div>
+                    <i class="fa fa-star fa-2x"></i>
+                    <i class="fa fa-star fa-2x"></i>
+                    <i class="fa fa-star fa-2x"></i>
+                    <i class="fa fa-star fa-2x"></i>
+                    <i class="fa fa-star-o fa-2x"></i>
+                    <p class="subtitle">4 out of 5 Stars</p>
+                </div>
+            </div>
+            <div class="level-item">
+                <button class="button is-info" @click="set_post_status(true)">Leave a Review</button>
+            </div>
+        </nav>
+    </section>
+    <div v-if="post_mode" class="container block">
+        <div class="form">
+    
+          <!-- This looks like a form, but is not.  We just need the inputs. -->
+          <div class="field">
+            <div class="control">
+              <textarea v-model="add_content" class="textarea" placeholder="Enter Review Here"></textarea>
+              <div class="select is-info">
+                <select v-model="content_stars">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <input type="submit" @click="add_post" value="Post" class="button is-info">
+              <input type="submit" @click="set_post_status(false)" value="Cancel" class="button is-warning">
+            </div>
+          </div>
+        </div>
+      </div>
+    <section>
+        <hr class="solid">
+        <h2 class="title is-4">Inverstor Reviews</h2>
+        <hr class="solid">
+    </section>
+    <section>
+        <div class="box" v-for="r in rows">
+            <div class="content is-large">{{r.email}}</div>
+            <div class="content is-medium">{{r.content}}</div>
+        </div>
+    </section>
+</div>
+
+
+[[block page_scripts]]
+<!-- Loads the index-specific js for Vue -->
+<script>
+    let add_post_url = "[[=XML(add_post_url)]]";
+    let load_posts_url = "[[=XML(load_posts_url)]]";
+    let load_search_results_url = "[[=XML(load_search_results_url)]]";
+</script>
+<script src="js/index.js"></script>
+[[end]]

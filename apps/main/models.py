@@ -36,9 +36,8 @@ db.define_table(
     'reviews',
     Field('property_manager_id', 'reference propertyManager'),
     Field('content', requires=IS_NOT_EMPTY()),
-    Field('upvotes', 'integer'),
-    Field('downvotes', 'integer'),
-    Field('user_id', 'reference user'),
+    Field('stars', 'integer'),
+    Field('user_email', default=get_user_email()),
 )
 
 db.define_table(
