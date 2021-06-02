@@ -47,6 +47,7 @@ def index():
         search_url=URL('search', signer=url_signer),
         property_url=URL('property', signer=url_signer),
         load_posts_url=URL('load_posts', signer=url_signer),
+        mid = -1
     )
 
 @action('search', method=["GET"])
@@ -57,12 +58,23 @@ def search():
     redirect(URL('results', q, is_address)) #also need type
     # return "ok"
 
-@action('property',method=["GET", "POST"])
+@action('propertyFull/<mid:int>',method=['GET', 'POST'])
 @action.uses(db, auth, 'property.html')
-def property():
-    manager_info = db(db.propertyManager.id == 1).select().as_list()
-    print(manager_info[0]['name'])
-    return dict(name=manager_info[0]['name'], city=manager_info[0]['city'], state=manager_info[0]['state'], zip=manager_info[0]['zip'],
+def property(mid=None): # pass in the prop manager id 
+    assert mid is not None
+    manager_info = db(db.propertyManager.id == mid).select().as_list()
+    return dict(mid=mid, name=manager_info[0]['name'], city=manager_info[0]['city'], state=manager_info[0]['state'], zip=manager_info[0]['zip'],
+    add_post_url=URL('add_post', signer=url_signer),
+    load_posts_url=URL('load_posts', signer=url_signer),
+    load_search_results_url = URL('load_results', signer=url_signer),)
+
+@action('property',method=['GET', 'POST'])
+@action.uses(db, auth)
+def property(): # pass in the prop manager id 
+    mid = request.json.get('mid')
+    manager_info = db(db.propertyManager.id == mid).select().as_list()
+    url = URL('propertyFull', mid)
+    return dict(url=url, name=manager_info[0]['name'], city=manager_info[0]['city'], state=manager_info[0]['state'], zip=manager_info[0]['zip'],
     add_post_url=URL('add_post', signer=url_signer),
     load_posts_url=URL('load_posts', signer=url_signer),
     load_search_results_url = URL('load_results', signer=url_signer),)
@@ -80,7 +92,8 @@ def results(query=None, is_address=None): # add flag for city/manager as param
     load_property_url=URL('load-property', signer=url_signer),
     load_posts_url=URL('load_posts', signer=url_signer),
     query=query,
-    is_address=is_address)
+    is_address=is_address,
+    mid=-1)
 
 @action('load_results')
 @action.uses(url_signer.verify(), db)

@@ -16,7 +16,7 @@ let init = (app) => {
         post_mode: false,
         add_content: "",
         content_stars: "",
-        managerID: 1,
+        managerID: -1,
         rows: [],
     };
 
@@ -55,14 +55,14 @@ let init = (app) => {
             {
                 content: app.vue.add_content,
                 stars: app.vue.content_stars,
-                mid: app.vue.managerID,
+                mid: managerID,
             }).then(
                 function (response){
                     app.vue.rows.push({
                         id: response.data.id,
                         content: app.vue.add_content,
                         stars: app.vue.content_stars,
-                        mid: app.vue.managerID,
+                        property_manager_id: managerID,
                         email: response.data.email,
                     });
                     app.enumerate(app.vue.rows);
@@ -76,7 +76,16 @@ let init = (app) => {
         app.vue.managerID = id;
         console.log(app.vue.managerID);
         console.log(app.vue.rows);
-        axios.post(property_url);
+        axios.post(property_url, 
+            {
+                mid: app.vue.managerID,
+            }).then(
+            function(response) { 
+                let a = document.createElement('a');
+                a.href = response.data.url;
+                a.click();
+            }
+        );
     }
 
     app.toggle_address = function (new_status) {

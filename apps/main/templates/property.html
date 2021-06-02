@@ -67,8 +67,8 @@
         <hr class="solid">
     </section>
     <section>
-        <div class="box" v-for="r in rows">
-            <div class="content is-large">{{r.email}}</div>
+        <div class="box" v-for="r in rows" v-if="[[=mid]] == r.property_manager_id">
+            <div  class="content is-large">{{r.email}}</div>
             <div class="content is-medium">{{r.content}}</div>
         </div>
     </section>
@@ -81,6 +81,7 @@
     let add_post_url = "[[=XML(add_post_url)]]";
     let load_posts_url = "[[=XML(load_posts_url)]]";
     let load_search_results_url = "[[=XML(load_search_results_url)]]";
+    let managerID = "[[=mid]]";
 </script>
 <script src="js/index.js"></script>
 [[end]]
