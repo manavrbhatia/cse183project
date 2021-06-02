@@ -63,7 +63,7 @@ let init = (app) => {
                         content: app.vue.add_content,
                         stars: app.vue.content_stars,
                         property_manager_id: managerID,
-                        email: response.data.email,
+                        user_email: response.data.email,
                     });
                     app.enumerate(app.vue.rows);
                     app.reset_form();
