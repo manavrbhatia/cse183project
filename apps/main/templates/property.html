@@ -68,7 +68,19 @@
     </section>
     <section>
         <div class="box" v-for="r in rows" v-if="[[=mid]] == r.property_manager_id">
-            <div  class="content is-large">{{r.user_email}}</div>
+            <nav class="level">
+                <div class="level-left item has-text-centered">
+                    <div  class="content is-large">{{r.user_email}}</div>
+                </div>
+                <div class="level item">
+                    <div v-for="s in r.stars">
+                        <i class="fa fa-star"></i>
+                    </div>
+                    <div v-for="s in 5-r.stars">
+                        <i class="fa fa-star-o"></i>
+                    </div>
+                </div>
+            </nav>
             <div class="content is-medium">{{r.content}}</div>
         </div>
     </section>
