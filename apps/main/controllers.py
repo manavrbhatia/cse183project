@@ -88,7 +88,7 @@ def results(query=None, is_address=None): # add flag for city/manager as param
     print(is_address)
     # redirect(URL('property'))
     return dict(my_callback_url = URL('my_callback', signer=url_signer),
-    load_search_results_url = URL('load_results', signer=url_signer),
+    load_search_results_url = URL('load_results', query, is_address, signer=url_signer),
     property_url=URL('property', signer=url_signer),
     load_property_url=URL('load-property', signer=url_signer),
     load_posts_url=URL('load_posts', signer=url_signer),
@@ -96,10 +96,24 @@ def results(query=None, is_address=None): # add flag for city/manager as param
     is_address=is_address,
     mid=-1)
 
-@action('load_results')
+@action('load_results/<query>/<is_address:int>')
 @action.uses(url_signer.verify(), db)
-def load_results():
-    manager_list = db(db.propertyManager).select().as_list()
+def load_results(query=None, is_address=None):
+    assert query is not None and is_address is not None
+    manager_list = None
+    if not query:
+        manager_list = db(db.propertyManager).select().as_list()
+    else:
+        if is_address:
+            address_arr = [s.strip() for s in query.split(',')]
+            if len(address_arr) == 3:
+                manager_list = db((db.propertyManager.city == address_arr[0]) & (db.propertyManager.state == address_arr[1]) & (db.propertyManager.zip == address_arr[2])).select().as_list()
+            else:
+                # entering bad input, should probably have smoething to deal with that, for now just make it empty
+                manager_list = db(db.propertyManager.id == -1).select().as_list()
+        else:
+            # if it's anywhere in the name param
+            manager_list = db(db.propertyManager.name.contains([query], all=True)).select().as_list()
     return dict(manager_list=manager_list)
 
 @action('add_post', method='POST')

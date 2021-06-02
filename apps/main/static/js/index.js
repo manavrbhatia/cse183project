@@ -31,7 +31,7 @@ let init = (app) => {
         console.log("before if")
         if (app.vue.query.length >= 1) {
             console.log("before req");
-            axios.get(search_url, {params: {q: app.vue.query, is_address: 2}})
+            axios.get(search_url, {params: {q: app.vue.query, is_address: app.vue.show_address}})
                 .then(function (response) {
                     let a = document.createElement('a');
                     a.href = response.data.url;
@@ -113,7 +113,7 @@ let init = (app) => {
 
     // And this initializes it.
     app.init = () => {
-        axios.get(load_search_results_url).then(function(response) {
+        axios.get(load_search_results_url, {params: {q: query, is_address: is_address}}).then(function(response) {
             app.vue.manager_list = app.enumerate(response.data.manager_list);
             axios.get(load_posts_url).then(function (response) {
                 app.vue.rows = app.enumerate(response.data.rows);
