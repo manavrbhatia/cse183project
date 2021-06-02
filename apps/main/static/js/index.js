@@ -31,10 +31,12 @@ let init = (app) => {
         console.log("before if")
         if (app.vue.query.length >= 1) {
             console.log("before req");
-            axios.get(search_url, {params: {q: app.vue.query, is_address: 2}});
-                // .then(function (result) {
-                //     app.vue.results = result.data.results;
-                // });
+            axios.get(search_url, {params: {q: app.vue.query, is_address: 2}})
+                .then(function (response) {
+                    let a = document.createElement('a');
+                    a.href = response.data.url;
+                    a.click();
+                });
             console.log("after req");
         } else {
             app.vue.results = [];

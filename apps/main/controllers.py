@@ -55,8 +55,8 @@ def index():
 def search():
     q = request.params.get("q")
     is_address = request.params.get("is_address")
-    redirect(URL('results', q, is_address)) #also need type
-    # return "ok"
+    # redirect(URL('results', q, is_address)) #also need type
+    return dict(url=URL('results', q, is_address))
 
 @action('propertyFull/<mid:int>',method=['GET', 'POST'])
 @action.uses(db, auth, 'property.html')
@@ -83,6 +83,7 @@ def property(): # pass in the prop manager id
 @action.uses(db, auth, 'results.html')
 def results(query=None, is_address=None): # add flag for city/manager as param
     assert query is not None and is_address is not None
+    print("im in results")
     print(query)
     print(is_address)
     # redirect(URL('property'))
