@@ -27,13 +27,12 @@
             </div>
         </div>
     </nav>
-</section>
-<section class="section">
-    <div class="columns is-centered is-mobile">
+
+    <div class="columns is-centered is-mobile mt-4">
         <div class="column is-four-fifths">
             <div v-for="m in manager_list" class="box is-shadowless" @click="propertyPage(m.id)"> <!-- is-shadowless -->
                 <figure class="image is-3by1 block">
-                    <img style="border-radius:1%;"src="https://via.placeholder.com/150">
+                    <img style="border-radius:1%;"src="https://images.squarespace-cdn.com/content/v1/5b06f923620b85e81ee01cb8/1527784838663-9B9EYM5L58T7EFDYGA2N/ke17ZwdGBToddI8pDm48kOUkwr3LnkI8qgmy0V0ratR7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0iy8Rj2bPXFyaluz0PeKicNHJfBfe-qo0FRyrKToFL2t-IRzz2HgnUDRIBp1WEMSkw/DJI_0969.jpg">
                 </figure>
                 
                 <!-- <div class="columns is-mobile">
@@ -58,7 +57,10 @@
                 <div class="level is-mobile">
                     <div class="level-left">
                         <div class="level-item">
-                            <h2 class="title is-4">{{m.name}}</h2>
+                            <span>
+                                <span class="title is-4">{{m.name}}</span>
+                                <br><span class="subtitle">{{m.city}}, {{m.state}} {{m.zip}}</span>
+                            </span>
                         </div>
                     </div>
                     <div class="level-right">
@@ -72,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-                <h3 class="subtitle">{{m.city}}, {{m.state}} {{m.zip}}</h3>
+                <!-- <h3 class="subtitle">{{m.city}}, {{m.state}} {{m.zip}}</h3> -->
             </div>
         </div>
     </div>
@@ -90,9 +92,9 @@
 </section>
 </div>
 
-<!-- fix spacing from top text to actual results-->
-<!-- fix the text getting pushed down for address-->
 <!-- get real images which can be uploaded and linked-->
+<!-- fix the add manager functionality-->
+<!-- add messaging for when manager list is empty -->
 
 [[block page_scripts]]
 <!-- Loads the index-specific js for Vue -->
