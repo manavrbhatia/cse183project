@@ -27,7 +27,7 @@
                 <div v-for="s in 5-[[=avgstars]]">
                     <i class="fa fa-star-o fa-2x"></i>
                 </div>
-                <h2 class="subtitle">[[=avgstars]] out of 5 Stars</h>
+                <h2 class="subtitle">[[=avgstars]] out of 5 Stars</h2>
             </div>
             <div class="level-item">
                 <button class="button is-info" @click="set_post_status(true)">Leave a Review</button>
@@ -66,7 +66,7 @@
         <hr class="solid">
     </section>
     <section>
-        <div class="box" v-for="r in rows" v-if="[[=mid]] == r.property_manager_id">
+        <div class="box" v-for="r in rows.slice().reverse()"  v-if="[[=mid]] == r.property_manager_id">
             <nav class="level">
                 <div class="level-left item has-text-centered">
                     <div  class="content is-large">{{r.name}}</div>

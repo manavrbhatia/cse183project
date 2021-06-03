@@ -59,5 +59,6 @@ db.define_table('thumbs',
     Field('email', requires=IS_NOT_EMPTY()),
     Field('rating', 'integer', default=4),
 )
+db.propertyManager.averageRating.readable = db.propertyManager.averageRating.writable = False
 
 db.commit()
