@@ -10,32 +10,56 @@
 <div class="section" id="vue-target" v-cloak>
   <h3 class="title has-text-centered">Find the <span class="title-is-2 has-text-warning">Property Manager</span> for you</h3>
 
-  <!-- maybe mess with spacing later -->
-  <div class="control block has-icons-left has-icons-right">
-    <!-- <input class="input is-rounded" type="text" v-model="query" @keyup="search" />
-    <input class="input"  -->
-    <div v-if="show_address">
-      <input class="input is-rounded is-info" v-model="query" type="text" placeholder="Your Property's City, State, Zip">
-      <span class="icon is-small is-left">
-        <i class="fa fa-building-o has-text-info"></i>
-      </span>
+  <div class="columns is-centered is-mobile">
+    <div class="column is-three-quarters">
+      <!-- maybe mess with spacing later -->
+      <div class="control block has-icons-left has-icons-right mt-3">
+        <!-- <input class="input is-rounded" type="text" v-model="query" @keyup="search" />
+        <input class="input"  -->
+        <div v-if="show_address">
+          <input class="input is-rounded is-info" v-model="query" type="text" placeholder="Your Property's City, State, Zip">
+          <span class="icon is-small is-left">
+            <i class="fa fa-building-o has-text-info"></i>
+          </span>
+        </div>
+        <div v-if="!show_address">
+          <input class="input is-rounded is-info" v-model="query" type="text" placeholder="Manager's Name">
+          <span class="icon is-small is-left">
+            <i class="fa fa-user-o has-text-info"></i>
+          </span>
+        </div>
+        <a class="icon is-small is-right" style="cursor: pointer; pointer-events: initial !important;" @click="search()"> <!-- getting 404, not sure if that's my issue-->
+          <i class="fa fa-search has-text-info"></i>
+        </a>
+      </div>
+      
+      <!--make the cursor not wacky when it hovers and clicks on the text-->
+      <p v-if="show_address" @click="toggle_address(0)" class="block subtitle-is-6 has-text-info has-text-centered" style="font-weight:bold">I'd like to look up a manager by name</p>
+      <p v-if="!show_address" @click="toggle_address(1)" class="block subtitle-is-6 has-text-info has-text-centered" style="font-weight:bold">I'd like to look up managers by address</p>  
     </div>
-    <div v-if="!show_address">
-      <input class="input is-rounded is-info" v-model="query" type="text" placeholder="Manager's Name">
-      <span class="icon is-small is-left">
-        <i class="fa fa-user-o has-text-info"></i>
-      </span>
+  </div>
+  <div class="columns is-centered is-mobile">
+    <div class="column is-two-thirds">
+      <div class="px-6 pt-3">
+        <figure class="image block">
+          <img style="border-radius:10%;" src="https://cdn.dribbble.com/users/2879528/screenshots/6344377/star_rating_4x.jpg?compress=1&resize=1600x1200"></iframe>
+        </figure>
+        <h1 class="title is-3 block has-text-centered">Rate Your Property's Managers</h1>
+      </div>
     </div>
-    <a class="icon is-small is-right" style="cursor: pointer; pointer-events: initial !important;" @click="search()"> <!-- getting 404, not sure if that's my issue-->
-      <i class="fa fa-search has-text-info"></i>
-    </a>
+  </div>
+
+  <div class="columns is-centered is-mobile">
+    <div class="column is-two-thirds">
+      <div class="px-6 pt-3">
+        <figure class="image block">
+          <img style="border-radius:10%;" src="https://cdn.dribbble.com/users/997338/screenshots/11614288/media/00bfd57177d53413402d2b828a3bea02.png?compress=1&resize=1600x1200"></iframe>
+        </figure>
+        <h1 class="title is-3 block has-text-centered">Like Other Investor's Ratings</h1>
+      </div>
+    </div>
   </div>
   
-  <!--make the cursor not wacky when it hovers and clicks on the text-->
-  <p v-if="show_address" @click="toggle_address(0)" class="subtitle-is-6 has-text-info has-text-centered" style="font-weight:bold">I'd like to look up a manager by name</p>
-  <p v-if="!show_address" @click="toggle_address(1)" class="subtitle-is-6 has-text-info has-text-centered" style="font-weight:bold">I'd like to look up managers by address</p>  
-
-  <div v-for="r in results">{{r}}</div>
 </div>
 
 
