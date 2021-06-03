@@ -38,9 +38,12 @@
                 <h2 class="title is-4">{{m.name}}</h2>
                 <h3 class="subtitle">{{m.city}}, {{m.state}} {{m.zip}}</h3>
             </div>
-            <div class="column is-offset-5">
+            <div v-for="s in m.averageRating">
                  <i class="fa fa-star"></i>
             </div>
+            <div v-for="s in 5 - m.averageRating" >
+                <i class="fa fa-star-o"></i>
+           </div>
         </div>
     </div>
 </section>

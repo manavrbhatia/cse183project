@@ -73,6 +73,7 @@ def property(mid=None): # pass in the prop manager id
         avgstars = round(sum(star) / len(star))
     else: 
         avgstars = 0
+    db.propertyManager.update_or_insert((db.propertyManager.id == mid), averageRating=avgstars)
     return dict(mid=mid, name=manager_info[0]['name'], avgstars=avgstars, city=manager_info[0]['city'], state=manager_info[0]['state'], zip=manager_info[0]['zip'],
     add_post_url=URL('add_post', signer=url_signer),
     load_posts_url=URL('load_posts', signer=url_signer),

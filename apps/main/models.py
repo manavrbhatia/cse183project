@@ -32,6 +32,7 @@ db.define_table(
     Field('city', requires=IS_NOT_EMPTY()),
     Field('state', requires=IS_NOT_EMPTY()),
     Field('zip', 'integer'),
+    Field('averageRating', 'integer'),
     Field('bio'),
 )
 
