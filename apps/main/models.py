@@ -10,6 +10,9 @@ from pydal.validators import *
 def get_user_email():
     return auth.current_user.get('email') if auth.current_user else None
 
+def get_user_name():
+    return auth.current_user.get('first_name') if auth.current_user else None
+
 def get_time():
     return datetime.datetime.utcnow()
 
@@ -37,7 +40,9 @@ db.define_table(
     Field('property_manager_id', 'reference propertyManager'),
     Field('content', requires=IS_NOT_EMPTY()),
     Field('stars', 'integer'),
+    Field('name', default=get_user_name()),
     Field('user_email', default=get_user_email()),
+    Field('day'),
 )
 
 db.define_table(

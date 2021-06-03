@@ -18,6 +18,8 @@ let init = (app) => {
         content_stars: "",
         managerID: -1,
         rows: [],
+        show_likers: false,
+        show_dislikers: false,
     };
 
     app.enumerate = (a) => {
@@ -25,6 +27,15 @@ let init = (app) => {
         let k = 0;
         a.map((e) => {e._idx = k++;});
         return a;
+    };
+
+    app.complete = (post_list) => {
+        post_list.map((post) => {
+            post.thumbs_up = false;
+            post.thumbs_down = false;
+            post.likers = [];
+            post.dislikers =[];
+        });
     };
 
     app.search = function () {
@@ -65,7 +76,9 @@ let init = (app) => {
                         content: app.vue.add_content,
                         stars: app.vue.content_stars,
                         property_manager_id: managerID,
+                        name: response.data.name,
                         user_email: response.data.email,
+                        day: response.data.d1,
                     });
                     app.enumerate(app.vue.rows);
                     app.reset_form();

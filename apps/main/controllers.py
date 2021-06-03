@@ -29,8 +29,9 @@ from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from py4web.utils.url_signer import URLSigner
-from .models import get_user_email
-
+from .models import get_user_email, get_user_name
+from py4web.utils.form import Form, FormStyleBulma
+from datetime import date
 import uuid
 import random
 
@@ -62,8 +63,15 @@ def search():
 @action.uses(db, auth, 'property.html')
 def property(mid=None): # pass in the prop manager id 
     assert mid is not None
+    star = []
     manager_info = db(db.propertyManager.id == mid).select().as_list()
-    return dict(mid=mid, name=manager_info[0]['name'], city=manager_info[0]['city'], state=manager_info[0]['state'], zip=manager_info[0]['zip'],
+    for row in db(db.reviews.property_manager_id == mid).select(db.reviews.stars):
+        star.append(row.stars)
+    if len(star) is not 0:
+        avgstars = round(sum(star) / len(star))
+    else: 
+        avgstars = 0
+    return dict(mid=mid, name=manager_info[0]['name'], avgstars=avgstars, city=manager_info[0]['city'], state=manager_info[0]['state'], zip=manager_info[0]['zip'],
     add_post_url=URL('add_post', signer=url_signer),
     load_posts_url=URL('load_posts', signer=url_signer),
     load_search_results_url = URL('load_results', signer=url_signer),)
@@ -119,16 +127,21 @@ def load_results(query=None, is_address=None):
 @action('add_post', method='POST')
 @action.uses(auth, url_signer.verify(), db)
 def add_post():
-    print(request.json.get('mid'))
+    today = date.today()
+    d1 = today.strftime("%m/%d/%Y")
     id = db.reviews.insert(
         content=request.json.get('content'),
         stars=request.json.get('stars'),
         property_manager_id=request.json.get('mid'),
+        name=get_user_name(),
         user_email=get_user_email(),
+        day=d1,
     )
     return dict(
         id=id,
+        name=get_user_email(),
         email=get_user_email(),
+        day=d1,
     )
 
 @action('load_posts')
@@ -136,3 +149,11 @@ def add_post():
 def load_posts():
     rows = db(db.reviews).select().as_list()
     return dict(rows= rows,)
+
+@action('add', method=['GET','POST'])
+@action.uses(db, session, auth.user, 'add.html')
+def add():
+    form = Form(db.propertyManager, csrf_session=session, formstyle=FormStyleBulma)
+    if form.accepted:
+        redirect(URL('index'))
+    return dict(form=form)

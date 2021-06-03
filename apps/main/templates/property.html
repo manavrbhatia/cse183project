@@ -21,14 +21,13 @@
         <h1 class="title">Reviews</h1>
         <nav class="level">
             <div class="level-item">
-                <div>
+                <div v-for="s in [[=avgstars]]">
                     <i class="fa fa-star fa-2x"></i>
-                    <i class="fa fa-star fa-2x"></i>
-                    <i class="fa fa-star fa-2x"></i>
-                    <i class="fa fa-star fa-2x"></i>
-                    <i class="fa fa-star-o fa-2x"></i>
-                    <p class="subtitle">4 out of 5 Stars</p>
                 </div>
+                <div v-for="s in 5-[[=avgstars]]">
+                    <i class="fa fa-star-o fa-2x"></i>
+                </div>
+                <h2 class="subtitle">[[=avgstars]] out of 5 Stars</h>
             </div>
             <div class="level-item">
                 <button class="button is-info" @click="set_post_status(true)">Leave a Review</button>
@@ -63,14 +62,14 @@
       </div>
     <section>
         <hr class="solid">
-        <h2 class="title is-4">Inverstor Reviews</h2>
+        <h2 class="title is-4">Investor Reviews</h2>
         <hr class="solid">
     </section>
     <section>
         <div class="box" v-for="r in rows" v-if="[[=mid]] == r.property_manager_id">
             <nav class="level">
                 <div class="level-left item has-text-centered">
-                    <div  class="content is-large">{{r.user_email}}</div>
+                    <div  class="content is-large">{{r.name}}</div>
                 </div>
                 <div class="level item">
                     <div v-for="s in r.stars">
@@ -82,6 +81,17 @@
                 </div>
             </nav>
             <div class="content is-medium">{{r.content}}</div>
+            <nav class="level">
+                <div class="level-item has-text-centered">
+                    <!-- <i v-if="p.thumbs_up==false" class="fa fa-thumbs-o-up" @click="thumbs_change(p._idx, 0)" @mouseenter="change_likers(true, p._idx)" @mouseleave="change_likers(false, p._idx)"></i>
+                    <i v-if="p.thumbs_up==true" class="fa fa-thumbs-up" @click="thumbs_change(p._idx, 1)" @mouseenter="change_likers(true, p._idx)" @mouseleave="change_likers(false, p._idx)"></i>
+                    <i v-if="p.thumbs_down==false" class="fa fa-thumbs-o-down" @click="thumbs_change(p._idx, 2)" @mouseenter="change_dislikers(true, p._idx)" @mouseleave="change_dislikers(false, p._idx)"></i>
+                    <i v-if="p.thumbs_down==true" class="fa fa-thumbs-down" @click="thumbs_change(p._idx, 3)" @mouseenter="change_dislikers(true, p._idx)" @mouseleave="change_dislikers(false, p._idx)"></i>
+                    <span v-if="show_likers==true&&post_display_id==p._idx">Liked By: {{p.likers}}</span>
+                    <span v-if="show_dislikers==true&&post_display_id==p._idx">Disiked By: {{p.dislikers}}</span> -->
+                </div>
+            </nav>
+            <div class="content is-small">{{r.day}}</div>
         </div>
     </section>
 </div>
