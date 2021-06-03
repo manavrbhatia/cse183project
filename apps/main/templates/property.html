@@ -83,12 +83,12 @@
             <div class="content is-medium">{{r.content}}</div>
             <nav class="level">
                 <div class="level-item has-text-centered">
-                    <!-- <i v-if="p.thumbs_up==false" class="fa fa-thumbs-o-up" @click="thumbs_change(p._idx, 0)" @mouseenter="change_likers(true, p._idx)" @mouseleave="change_likers(false, p._idx)"></i>
-                    <i v-if="p.thumbs_up==true" class="fa fa-thumbs-up" @click="thumbs_change(p._idx, 1)" @mouseenter="change_likers(true, p._idx)" @mouseleave="change_likers(false, p._idx)"></i>
-                    <i v-if="p.thumbs_down==false" class="fa fa-thumbs-o-down" @click="thumbs_change(p._idx, 2)" @mouseenter="change_dislikers(true, p._idx)" @mouseleave="change_dislikers(false, p._idx)"></i>
-                    <i v-if="p.thumbs_down==true" class="fa fa-thumbs-down" @click="thumbs_change(p._idx, 3)" @mouseenter="change_dislikers(true, p._idx)" @mouseleave="change_dislikers(false, p._idx)"></i>
-                    <span v-if="show_likers==true&&post_display_id==p._idx">Liked By: {{p.likers}}</span>
-                    <span v-if="show_dislikers==true&&post_display_id==p._idx">Disiked By: {{p.dislikers}}</span> -->
+                    <i v-if="r.thumbs_up==false" class="fa fa-thumbs-o-up fa-2x" @click="thumbs_change(r._idx, 0)"></i>
+                    <i v-if="r.thumbs_up==true" class="fa fa-thumbs-up fa-2x" @click="thumbs_change(r._idx, 1)" ></i>
+                    <span >{{r.likers}}</span>
+                    <i v-if="r.thumbs_down==false" class="fa fa-thumbs-o-down fa-2x" @click="thumbs_change(r._idx, 2)"></i>
+                    <i v-if="r.thumbs_down==true" class="fa fa-thumbs-down fa-2x" @click="thumbs_change(r._idx, 3)"></i>
+                    <span >{{r.dislikers}}</span>
                 </div>
             </nav>
             <div class="content is-small">{{r.day}}</div>
@@ -103,7 +103,11 @@
     let add_post_url = "[[=XML(add_post_url)]]";
     let load_posts_url = "[[=XML(load_posts_url)]]";
     let load_search_results_url = "[[=XML(load_search_results_url)]]";
+    let set_rating_url = "[[=XML(set_rating_url)]]";
+    let get_rating_url = "[[=XML(get_rating_url)]]";
     let managerID = "[[=mid]]";
+    let query = "";
+    let is_address = 2;
 </script>
 <script src="js/index.js"></script>
 [[end]]

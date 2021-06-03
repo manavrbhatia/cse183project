@@ -43,6 +43,8 @@ db.define_table(
     Field('name', default=get_user_name()),
     Field('user_email', default=get_user_email()),
     Field('day'),
+    Field('likers', 'integer', default=0),
+    Field('dislikers', 'integer', default=0),
 )
 
 db.define_table(
@@ -51,11 +53,10 @@ db.define_table(
     Field('review_id', 'reference reviews'),
 )
 
-db.define_table(
-    'userRatingReview',
-    Field('user_id', 'reference user'),
-    Field('review_id', 'reference reviews'),
-    Field('upvoted', 'boolean'),
+db.define_table('thumbs',
+    Field('post_id', 'reference reviews'),
+    Field('email', requires=IS_NOT_EMPTY()),
+    Field('rating', 'integer', default=4),
 )
 
 db.commit()

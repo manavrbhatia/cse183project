@@ -48,6 +48,8 @@ def index():
         search_url=URL('search', signer=url_signer),
         property_url=URL('property', signer=url_signer),
         load_posts_url=URL('load_posts', signer=url_signer),
+        set_rating_url = URL('set_rating', signer=url_signer),
+        get_rating_url = URL('get_rating', signer=url_signer),
         mid = -1
     )
 
@@ -74,7 +76,9 @@ def property(mid=None): # pass in the prop manager id
     return dict(mid=mid, name=manager_info[0]['name'], avgstars=avgstars, city=manager_info[0]['city'], state=manager_info[0]['state'], zip=manager_info[0]['zip'],
     add_post_url=URL('add_post', signer=url_signer),
     load_posts_url=URL('load_posts', signer=url_signer),
-    load_search_results_url = URL('load_results', signer=url_signer),)
+    load_search_results_url = URL('load_results', signer=url_signer),
+    set_rating_url = URL('set_rating', signer=url_signer),
+    get_rating_url = URL('get_rating', signer=url_signer),)
 
 @action('property',method=['GET', 'POST'])
 @action.uses(db, auth)
@@ -100,6 +104,8 @@ def results(query=None, is_address=None): # add flag for city/manager as param
     property_url=URL('property', signer=url_signer),
     load_property_url=URL('load-property', signer=url_signer),
     load_posts_url=URL('load_posts', signer=url_signer),
+    set_rating_url = URL('set_rating', signer=url_signer),
+    get_rating_url = URL('get_rating', signer=url_signer),
     query=query,
     is_address=is_address,
     mid=-1)
@@ -157,3 +163,35 @@ def add():
     if form.accepted:
         redirect(URL('index'))
     return dict(form=form)
+
+@action('set_rating', method="POST")
+@action.uses(url_signer.verify(), db, auth.user)
+def set_rating():
+    post_id = request.json.get('post_id')
+    rating = request.json.get('rating')
+    likers = request.json.get('likers')
+    dislikers = request.json.get('dislikers')
+    print(post_id)
+    db.thumbs.update_or_insert(
+        ((db.thumbs.post_id == post_id)  & (db.thumbs.email== get_user_email())),
+        post_id = post_id,
+        email = get_user_email(),
+        rating = rating,
+    )
+    db.reviews.update_or_insert(
+        (db.reviews.id == post_id),
+        likers=likers,
+        dislikers=dislikers,
+    )
+    return "ok"
+
+@action('get_rating')
+@action.uses(url_signer.verify(), db, auth.user)
+def get_rating():
+    post_id = int(request.params.get('post_id'))
+    row = db((db.thumbs.post_id == post_id) & (db.thumbs.email == get_user_email())).select().first()
+    rating = row.rating if row is not None else 4
+    row2 = db(db.reviews.id == post_id).select().first()
+    likers = row2.likers
+    dislikers = row2.dislikers
+    return dict(rating=rating, likers=likers, dislikers=dislikers)

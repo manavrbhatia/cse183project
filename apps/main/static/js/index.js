@@ -20,6 +20,7 @@ let init = (app) => {
         rows: [],
         show_likers: false,
         show_dislikers: false,
+        post_display_id: 0
     };
 
     app.enumerate = (a) => {
@@ -29,12 +30,12 @@ let init = (app) => {
         return a;
     };
 
-    app.complete = (post_list) => {
-        post_list.map((post) => {
-            post.thumbs_up = false;
-            post.thumbs_down = false;
-            post.likers = [];
-            post.dislikers =[];
+    app.complete = (rows) => {
+        rows.map((row) => {
+            row.thumbs_up = false;
+            row.thumbs_down = false;
+            row.likers = 0;
+            row.dislikers = 0;
         });
     };
 
@@ -57,6 +58,16 @@ let init = (app) => {
     app.set_post_status = function (new_status) {
         app.vue.post_mode = new_status;
     };
+
+    app.change_likers = function (status, id) {
+        app.vue.show_likers = status;
+        app.vue.post_display_id = id;
+    }
+
+    app.change_dislikers = function (status, id) {
+        app.vue.show_dislikers = status;
+        app.vue.post_display_id = id;
+    }
 
     app.reset_form = function () {
         app.vue.add_content = "";
@@ -107,6 +118,41 @@ let init = (app) => {
         app.vue.show_address = new_status;
     };
 
+    app.thumbs_change = async function (idx, idf) {
+        let rating = 4;
+        let post = app.vue.rows[idx];
+        if(idf == 0){
+            post.thumbs_up=true;
+            if(post.thumbs_down==true){
+                post.thumbs_down=false;
+                post.dislikers = post.dislikers - 1
+            }
+            rating = 5;
+            post.likers = post.likers + 1
+            app.enumerate(app.vue.rows);
+        } else if(idf==1){
+            post.thumbs_up=false;
+            post.likers = post.likers -1
+            app.enumerate(app.vue.rows);
+        } else if(idf == 2){
+            post.thumbs_down=true;
+            if(post.thumbs_up==true){
+                post.thumbs_up=false;
+                post.likers = post.likers -1
+            }
+            rating = 6;
+            post.dislikers = post.dislikers + 1
+            app.enumerate(app.vue.rows);
+        } else if(idf==3){
+            post.thumbs_down=false;
+            post.dislikers = post.dislikers - 1
+            app.enumerate(app.vue.rows)
+        }
+        axios.post(set_rating_url, {post_id: post.id, rating: rating, likers: post.likers, dislikers: post.dislikers});
+        app.vue.set_post_status(true); 
+        app.vue.set_post_status(false); 
+    };
+
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
@@ -115,6 +161,9 @@ let init = (app) => {
         propertyPage: app.propertyPage,
         set_post_status: app.set_post_status,
         add_post: app.add_post,
+        thumbs_change: app.thumbs_change,
+        change_likers: app.change_likers,
+        change_dislikers: app.change_dislikers,
     };
 
     // This creates the Vue instance.
@@ -128,11 +177,30 @@ let init = (app) => {
     app.init = () => {
         axios.get(load_posts_url).then(function (response) {
             app.vue.rows = app.enumerate(response.data.rows);
+            app.complete(app.vue.rows);
             console.log(app.vue.rows);
             axios.get(load_search_results_url, {params: {q: query, is_address: is_address}}).then(function(response) {
                 app.vue.manager_list = app.enumerate(response.data.manager_list);
-            });
-        });
+            }).finally( function(response){
+                console.log("HAPPENDINGF")
+                for(let post of app.vue.rows) {
+                    axios.get(get_rating_url, {params: {post_id: post.id}}).then((result) => {
+                        if(result.data.rating == 4){
+                            post.thumbs_up = false;
+                            post.thumbs_down = false;
+                        } else if(result.data.rating == 5){
+                            console.log("YEEEE")
+                            post.thumbs_up = true;
+                            post.thumbs_down = false;
+                        } else if(result.data.rating == 6){
+                            post.thumbs_up = false;
+                            post.thumbs_down = true;
+                        }
+                        post.likers = result.data.likers;
+                        post.dislikers = result.data.dislikers;
+                    }).then(() => {app.set_post_status(true); app.set_post_status(false);});
+            }})
+        })
         console.log("INIT APP");
     };
 
