@@ -74,7 +74,12 @@ def property(mid=None): # pass in the prop manager id
     else: 
         avgstars = 0
     db.propertyManager.update_or_insert((db.propertyManager.id == mid), averageRating=avgstars)
+    if get_user_email() is not None:
+        userlog = 1
+    else:
+        userlog = 0
     return dict(mid=mid, name=manager_info[0]['name'], avgstars=avgstars, city=manager_info[0]['city'], state=manager_info[0]['state'], zip=manager_info[0]['zip'],
+    userlog=userlog,
     add_post_url=URL('add_post', signer=url_signer),
     load_posts_url=URL('load_posts', signer=url_signer),
     load_search_results_url = URL('load_results', signer=url_signer),
@@ -82,7 +87,7 @@ def property(mid=None): # pass in the prop manager id
     get_rating_url = URL('get_rating', signer=url_signer),)
 
 @action('property',method=['GET', 'POST'])
-@action.uses(db, auth)
+@action.uses(db, auth, url_signer.verify())
 def property(): # pass in the prop manager id 
     mid = request.json.get('mid')
     manager_info = db(db.propertyManager.id == mid).select().as_list()
