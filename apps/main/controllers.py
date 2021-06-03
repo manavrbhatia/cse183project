@@ -136,6 +136,7 @@ def load_results(query=None, is_address=None):
 def add_post():
     today = date.today()
     d1 = today.strftime("%m/%d/%Y")
+    print(d1)
     id = db.reviews.insert(
         content=request.json.get('content'),
         stars=request.json.get('stars'),
@@ -146,7 +147,7 @@ def add_post():
     )
     return dict(
         id=id,
-        name=get_user_email(),
+        name=get_user_name(),
         email=get_user_email(),
         day=d1,
     )

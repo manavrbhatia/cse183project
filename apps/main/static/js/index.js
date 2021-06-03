@@ -82,16 +82,19 @@ let init = (app) => {
                 mid: managerID,
             }).then(
                 function (response){
+                    console.log(app.vue.content_stars)
+
                     app.vue.rows.push({
                         id: response.data.id,
                         content: app.vue.add_content,
-                        stars: app.vue.content_stars,
+                        stars: parseInt(app.vue.content_stars),
                         property_manager_id: managerID,
                         name: response.data.name,
                         user_email: response.data.email,
-                        day: response.data.d1,
+                        day: response.data.day,
                     });
                     app.enumerate(app.vue.rows);
+                    app.complete(app.vue.rows);
                     app.reset_form();
                     app.set_post_status(false);
                 });
