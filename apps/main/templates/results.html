@@ -32,7 +32,8 @@
         <div class="column is-four-fifths">
             <div v-for="m in manager_list" class="box is-shadowless" @click="propertyPage(m.id)"> <!-- is-shadowless -->
                 <figure class="image is-3by1 block">
-                    <img style="border-radius:1%;"src="https://s3-media0.fl.yelpcdn.com/assets/public/large_empty_biz_skyline.yji-a5d24f480b0062becebc68611740ee5d.svg">
+                    <img v-if="m.img_str===null" style="border-radius:1%;" src="https://s3-media0.fl.yelpcdn.com/assets/public/large_empty_biz_skyline.yji-a5d24f480b0062becebc68611740ee5d.svg">
+                    <img v-else="m.img_str.length!==0" style="border-radius:1%;" :src="m.img_str">
                 </figure>
                 
                 <!-- <div class="columns is-mobile">
