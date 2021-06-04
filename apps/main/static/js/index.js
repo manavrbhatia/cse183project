@@ -265,10 +265,13 @@ let init = (app) => {
             axios.get(get_property_image_url, {params: {mid: managerID}})
                 .then(
                 function(response){
-                    console.log(response);
-                    Vue.set(this, 'property_image', response.data.img_str);
-                    app.vue.property_image = response.data.img_str;
-                    console.log(app.vue.property_image)
+                    console.log(typeof response.data.img_str);
+                    if( typeof response.data.img_str === "string") {
+                        console.log(response);
+                        Vue.set(this, 'property_image', response.data.img_str);
+                        app.vue.property_image = response.data.img_str;
+                        console.log(app.vue.property_image);
+                    }
                 }
             );
         }
