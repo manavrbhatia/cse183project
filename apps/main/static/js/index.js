@@ -20,7 +20,10 @@ let init = (app) => {
         rows: [],
         show_likers: false,
         show_dislikers: false,
-        post_display_id: 0
+        post_display_id: 0,
+        selection_done: false,
+        show_upload: false,
+        property_image: ""
     };
 
     app.enumerate = (a) => {
@@ -121,6 +124,10 @@ let init = (app) => {
         app.vue.show_address = new_status;
     };
 
+    app.toggle_show_upload = function(new_status) {
+        app.vue.show_upload = new_status;
+    }
+
     app.thumbs_change = async function (idx, idf) {
         let rating = 4;
         let post = app.vue.rows[idx];
@@ -156,6 +163,50 @@ let init = (app) => {
         app.vue.set_post_status(false); 
     };
 
+    // app.property_has_image = function (mid) {
+    //     //TODO;
+    //     let img_str = app.get_property_image(mid);
+    //     return img_str.length !== 0;
+    // };
+
+    // app.get_property_image = function (mid) {
+    //     //TODO;
+
+    //     // if the image has already been set and it's non-blank, then don't do this
+
+    //     let img_str = ""; // make this into a vue variable so it's reactive on upload; will also need to call this func from init and set to that vue var
+    //     axios.get(get_property_image_url, {params: {mid: managerID}}).then(
+    //         function(response){
+    //             console.log(response);
+    //             img_str = response.data.img_str;
+    //         }
+    //     );
+    //     console.log(img_str);
+    //     return img_str;
+    // };
+
+    app.upload_file = function (event, mid) {
+        let input = event.target;
+        let file = input.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.addEventListener("load", function (){
+                axios.post(upload_property_image_url,
+                {
+                    mid: managerID,
+                    property_image: reader.result
+                })
+                .then( function () {
+                    //sets the local preview
+                    app.vue.property_image = reader.result; 
+                    Vue.set(this, "property_image", reader.result);
+                    console.log(property_image);
+                })
+            });
+            reader.readAsDataURL(file);
+        }
+    };
+
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
@@ -167,6 +218,10 @@ let init = (app) => {
         thumbs_change: app.thumbs_change,
         change_likers: app.change_likers,
         change_dislikers: app.change_dislikers,
+        toggle_show_upload: app.toggle_show_upload,
+        // get_property_image: app.get_property_image,
+        // property_has_image: app.property_has_image,
+        upload_file: app.upload_file
     };
 
     // This creates the Vue instance.
@@ -181,7 +236,7 @@ let init = (app) => {
         axios.get(load_posts_url).then(function (response) {
             app.vue.rows = app.enumerate(response.data.rows);
             app.complete(app.vue.rows);
-            console.log(app.vue.rows);
+            // console.log(app.vue.rows);
             axios.get(load_search_results_url, {params: {q: query, is_address: is_address}}).then(function(response) {
                 app.vue.manager_list = app.enumerate(response.data.manager_list);
             }).finally( function(response){
@@ -203,7 +258,20 @@ let init = (app) => {
                         post.dislikers = result.data.dislikers;
                     }).then(() => {app.set_post_status(true); app.set_post_status(false);});
             }})
-        })
+        });
+        if (managerID!== undefined){
+            console.log("HELLO IM LUCA DE ALFARROO");
+            // let property_image = app.get_property_image(managerID);
+            axios.get(get_property_image_url, {params: {mid: managerID}})
+                .then(
+                function(response){
+                    console.log(response);
+                    Vue.set(this, 'property_image', response.data.img_str);
+                    app.vue.property_image = response.data.img_str;
+                    console.log(app.vue.property_image)
+                }
+            );
+        }
         console.log("INIT APP");
     };
 

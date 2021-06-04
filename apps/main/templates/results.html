@@ -32,7 +32,7 @@
         <div class="column is-four-fifths">
             <div v-for="m in manager_list" class="box is-shadowless" @click="propertyPage(m.id)"> <!-- is-shadowless -->
                 <figure class="image is-3by1 block">
-                    <img style="border-radius:1%;"src="https://images.squarespace-cdn.com/content/v1/5b06f923620b85e81ee01cb8/1527784838663-9B9EYM5L58T7EFDYGA2N/ke17ZwdGBToddI8pDm48kOUkwr3LnkI8qgmy0V0ratR7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0iy8Rj2bPXFyaluz0PeKicNHJfBfe-qo0FRyrKToFL2t-IRzz2HgnUDRIBp1WEMSkw/DJI_0969.jpg">
+                    <img style="border-radius:1%;"src="https://s3-media0.fl.yelpcdn.com/assets/public/large_empty_biz_skyline.yji-a5d24f480b0062becebc68611740ee5d.svg">
                 </figure>
                 
                 <!-- <div class="columns is-mobile">
@@ -76,19 +76,24 @@
                 </div>
                 <!-- <h3 class="subtitle">{{m.city}}, {{m.state}} {{m.zip}}</h3> -->
             </div>
+            <div v-if="manager_list.length==0" class="block">
+                <figure class="image block">
+                    <img style="border-radius:10%;" src="https://cdn.dribbble.com/users/415089/screenshots/14359077/media/12e60e1d4f5556b56310908bc9e6c2ea.jpg?compress=1&resize=1200x900"></iframe>
+                </figure>
+            </div>
+            <div class="has-text-centered">
+                <a href="[[=URL('add')]]">
+                    <h1 class="title-5" style="text-decoration: underline;">
+                        Don't see your property manager? Click here.
+                    </h1>
+                </a>
+                <!-- <a class="button is-info" >
+                    <span class="icon"><i class="fa fa-plus"></i></span>
+                    <span>Add Manager</span>
+                </a> -->
+            </div>
         </div>
     </div>
-</section>
-<section>
-    <nav class="level">
-        <div class="level-item has-text-centered">
-            <h1 class="title-5">Don't see your property manager? -></h1>
-            <a class="button is-info" href="[[=URL('add')]]">
-                <span class="icon"><i class="fa fa-plus"></i></span>
-                <span>Add Manager</span>
-            </a>
-        </div>
-    </nav>
 </section>
 </div>
 

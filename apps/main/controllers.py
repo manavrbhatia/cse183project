@@ -84,7 +84,9 @@ def property(mid=None): # pass in the prop manager id
     load_posts_url=URL('load_posts', signer=url_signer),
     load_search_results_url = URL('load_results', signer=url_signer),
     set_rating_url = URL('set_rating', signer=url_signer),
-    get_rating_url = URL('get_rating', signer=url_signer),)
+    get_rating_url = URL('get_rating', signer=url_signer),
+    get_property_image_url = URL('get_property_image', signer=url_signer),
+    upload_property_image_url = URL('upload_property_image', signer=url_signer))
 
 @action('property',method=['GET', 'POST'])
 @action.uses(db, auth, url_signer.verify())
@@ -96,6 +98,29 @@ def property(): # pass in the prop manager id
     add_post_url=URL('add_post', signer=url_signer),
     load_posts_url=URL('load_posts', signer=url_signer),
     load_search_results_url = URL('load_results', signer=url_signer),)
+
+@action('upload_property_image', method="POST")
+@action.uses(url_signer.verify(), db)
+def upload_property_image():
+    mid = request.json.get("mid")
+    img_str = request.json.get("property_image")
+    print(mid)
+    # db(db.propertyManager.id == mid).update(img_str=img_str)
+    db.propertyManager.update_or_insert(
+        (db.propertyManager.id == mid),
+        img_str=img_str
+    )
+    return "ok"
+
+@action('get_property_image')
+@action.uses(db, auth)
+def get_property_image():
+    mid = request.params.get("mid")
+    print(mid)
+    result = db(db.propertyManager.id == mid).select(db.propertyManager.img_str).as_list()
+    # print(result[0]['img_str'])
+    i_str = result[0]['img_str']
+    return dict(img_str=i_str)
 
 @action('results/<query>/<is_address:int>', method=["GET"])
 @action.uses(db, auth, 'results.html')

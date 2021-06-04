@@ -6,105 +6,172 @@
     }
 </style>
 
-<div class="section" id="vue-target" v-cloak>
-    <section class="section">
+<div id="vue-target" v-cloak>
+    <section @mouseenter="toggle_show_upload(true)" @mouseleave="toggle_show_upload(false)">
+        <div class="card is-shadowless">
+            <div class="card-image">
+              <figure class="image">
+                <img v-if="property_image.length===0" src="https://s3-media0.fl.yelpcdn.com/assets/public/large_empty_biz_skyline.yji-a5d24f480b0062becebc68611740ee5d.svg" alt="Placeholder image">
+                <img v-else="property_image.length!==0" :src="property_image">
+              </figure>
+              <!-- add code so that it's only if there's no image for this prop, otherwise it's the one from db -->
+            </div>
+            <div v-if="show_upload" class="card-content is-overlay has-text-centered">
+                <div v-if="!selection_done" class="field has-addons block is-pulled-right">
+                    <p class="control">
+                       <div class="file is-info">
+                       <label class="file-label">
+                          <input class="file-input" type="file"
+                                accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+                                @change="upload_file($event)">
+                          <span class="file-cta">
+                             <span class="file-label">
+                             <span>Choose Company Image</span>
+                             </span>
+                          </span>
+                       </label>
+                       </div>
+                    </p>
+                 </div>
+            </div>
+          </div>
+    </section>
+    <!-- <div v-if="!selection_done" class="field has-addons block">
+        <p class="control">
+           <div class="file is-info">
+           <label class="file-label">
+              <input class="file-input" type="file"
+                    accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+                    @change="select_file($event)">
+              <span class="file-cta">
+                 <span class="file-label">
+                 <span>Choose Company Image</span>
+                 </span>
+              </span>
+           </label>
+           </div>
+        </p>
+    </div> -->
+    <div class="block pt-5">
         <div class="level-item has-text-centered">
             <h1 class="title is-2">[[=name]]</h1>
         </div>
         <div class="level-item has-text-centered">
             <h2 class="subtitle">[[=city]], [[=state]], [[=zip]]</h2>
         </div>
-    </section>
-<div class="columns is-centered is-mobile mt-4">
-    <div class="column is-four-fifths">
-    <section>
-        <h1 class="title">Reviews</h1>
-        <nav class="level is-mobile">
-            <div class=level-left>
-                <div class="level-item">
-                    <div v-for="s in [[=avgstars]]">
-                        <i class="fa fa-star fa-2x has-text-warning"></i>
-                    </div>
-                    <div v-for="s in 5-[[=avgstars]]">
-                        <i class="fa fa-star fa-2x has-text-grey-light"></i>
-                    </div>
-                    <span class="subtitle">[[=avgstars]] out of 5 Stars</span>
-                    
-                </div>
-            </div>
-            <div class="level-right">
-                <div class="level-item" v-if="[[=userlog]] == 1">
-                    <button class="button is-info" @click="set_post_status(true)">Leave a Review</button>
-                </div>
-            </div>
-        </nav>
-    </section>
-    <div v-if="post_mode" class="container block">
-        <div class="form">
-    
-          <!-- This looks like a form, but is not.  We just need the inputs. -->
-          <div class="field">
-            <div class="control">
-              <textarea v-model="add_content" class="textarea" placeholder="Enter Review Here"></textarea>
-              <div class="select is-info">
-                <select v-model="content_stars">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="field">
-            <div class="control">
-              <input type="submit" @click="add_post" value="Post" class="button is-info">
-              <input type="submit" @click="set_post_status(false)" value="Cancel" class="button is-warning">
-            </div>
-          </div>
-        </div>
-      </div>
-    <section>
-        <hr class="solid">
-        <h2 class="title is-4">Investor Reviews</h2>
-        <hr class="solid">
-    </section>
-    <section>
-        <div class="box is-shadowless" v-for="r in rows.slice().reverse()"  v-if="[[=mid]] == r.property_manager_id">
-            <nav class="level is-mobile">
-                <div class="level-left">
+    </div>
+    <div class="columns is-centered is-mobile mt-4">
+        <div class="column is-four-fifths">
+        <section>
+            <h1 class="title">Reviews</h1>
+            <nav class="level is-mobile mb-0">
+                <div class=level-left>
                     <div class="level-item">
-                        <div class="title is-5 has-text-info">{{r.name}}</div>
+                        <div v-for="s in [[=avgstars]]">
+                            <i class="fa fa-star fa-2x has-text-warning"></i>
+                        </div>
+                        <div v-for="s in 5-[[=avgstars]]">
+                            <i class="fa fa-star fa-2x has-text-grey-light"></i>
+                        </div>
+                        
                     </div>
                 </div>
-                <div class="level item">
-                    <div class="level-right">
-                        <div v-for="s in r.stars">
-                            <i class="fa fa-star has-text-warning"></i>
-                        </div>
-                        <div v-for="s in 5-r.stars">
-                            <i class="fa fa-star has-text-grey-light"></i>
-                        </div>
+                <div class="level-right">
+                    <div class="level-item" v-if="[[=userlog]] == 1">
+                        <button class="button is-info" @click="set_post_status(true)">Leave a Review</button>
                     </div>
                 </div>
             </nav>
-            <p class="subtitle is-6 has-text-black">{{r.content}}</p>
-            <nav class="level">
-                <div class="level-item has-text-centered">
-                    <i v-if="r.thumbs_up==false" class="fa fa-thumbs-o-up fa-2x has-text-info" @click="thumbs_change(r._idx, 0)"></i>
-                    <i v-if="r.thumbs_up==true" class="fa fa-thumbs-up fa-2x has-text-info" @click="thumbs_change(r._idx, 1)" ></i>
-                    <span class="has-text-info">{{r.likers}}</span>
-                    <i v-if="r.thumbs_down==false" class="fa fa-thumbs-o-down fa-2x has-text-info" @click="thumbs_change(r._idx, 2)"></i>
-                    <i v-if="r.thumbs_down==true" class="fa fa-thumbs-down fa-2x has-text-info" @click="thumbs_change(r._idx, 3)"></i>
-                    <span class="has-text-info">{{r.dislikers}}</span>
+            <span class="subtitle">[[=avgstars]] out of 5 Stars</span>
+        </section>
+        <div v-if="post_mode" class="container block">
+            <div class="form">
+        
+            <!-- This looks like a form, but is not.  We just need the inputs. -->
+            <div class="field">
+                <div class="control">
+                <textarea v-model="add_content" class="textarea" placeholder="Enter Review Here"></textarea>
+                <div class="select is-info">
+                    <select v-model="content_stars">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
                 </div>
-            </nav>
-            <div class="is-size-7">{{r.day}}</div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                <input type="submit" @click="add_post" value="Post" class="button is-info">
+                <input type="submit" @click="set_post_status(false)" value="Cancel" class="button is-warning">
+                </div>
+            </div>
+            </div>
         </div>
-    </section>
-    </div>
-    </div>
+        <section>
+            <hr class="solid">
+            <h2 class="title is-4">Investor Reviews</h2>
+            <hr class="solid">
+        </section>
+        <section>
+            <div class="box is-shadowless" v-for="r in rows.slice().reverse()"  v-if="[[=mid]] == r.property_manager_id">
+                <nav class="level is-mobile">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <div class="title is-5 has-text-info">{{r.name}}</div>
+                        </div>
+                    </div>
+                    <div class="level item">
+                        <div class="level-right">
+                            <div v-for="s in r.stars">
+                                <i class="fa fa-star has-text-warning"></i>
+                            </div>
+                            <div v-for="s in 5-r.stars">
+                                <i class="fa fa-star has-text-grey-light"></i>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                <p class="subtitle is-6 has-text-black">{{r.content}}</p>
+                <div class="columns is-mobile">
+                    <div class="column is-6">
+                        <div class="is-size-7">{{r.day}}</div>
+                    </div>
+                    <div class="column is-3">
+                        <i v-if="r.thumbs_up==false" class="fa fa-thumbs-o-up fa-2x has-text-info is-size-5" @click="thumbs_change(r._idx, 0)"></i>
+                        <i v-if="r.thumbs_up==true" class="fa fa-thumbs-up fa-2x has-text-info is-size-5" @click="thumbs_change(r._idx, 1)" ></i>
+                        <span class="has-text-info is-size-7">{{r.likers}}</span>
+                    </div>
+                    <div class="column is-3">
+                        <i v-if="r.thumbs_down==false" class="fa fa-thumbs-o-down fa-2x has-text-info is-size-5" @click="thumbs_change(r._idx, 2)"></i>
+                        <i v-if="r.thumbs_down==true" class="fa fa-thumbs-down fa-2x has-text-info is-size-5" @click="thumbs_change(r._idx, 3)"></i>
+                        <span class="has-text-info is-size-7">{{r.dislikers}}</span>
+                    </div>
+                </div>
+                <!-- <nav class="level is-mobile">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <div class="is-size-7">{{r.day}}</div>
+                        </div>
+                    </div>
+                    <div class="level-right">
+                        <div class="level-item has-text-centered">
+                            <i v-if="r.thumbs_up==false" class="fa fa-thumbs-o-up fa-2x has-text-info" @click="thumbs_change(r._idx, 0)"></i>
+                            <i v-if="r.thumbs_up==true" class="fa fa-thumbs-up fa-2x has-text-info" @click="thumbs_change(r._idx, 1)" ></i>
+                            <span class="has-text-info">{{r.likers}}</span>
+                            <i v-if="r.thumbs_down==false" class="fa fa-thumbs-o-down fa-2x has-text-info" @click="thumbs_change(r._idx, 2)"></i>
+                            <i v-if="r.thumbs_down==true" class="fa fa-thumbs-down fa-2x has-text-info" @click="thumbs_change(r._idx, 3)"></i>
+                            <span class="has-text-info">{{r.dislikers}}</span>
+                        </div>
+                    </div>
+                </nav> -->
+                </div>
+            </div>
+        </section>
+        </div>
+        </div>
 </div>
 
 
@@ -119,6 +186,8 @@
     let managerID = "[[=mid]]";
     let query = "";
     let is_address = 2;
+    let get_property_image_url = "[[=XML(get_property_image_url)]]";
+    let upload_property_image_url = "[[=XML(upload_property_image_url)]]";
 </script>
 <script src="js/index.js"></script>
 [[end]]

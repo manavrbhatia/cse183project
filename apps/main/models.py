@@ -34,7 +34,9 @@ db.define_table(
     Field('zip', 'integer'),
     Field('averageRating', 'integer'),
     Field('bio'),
+    Field('img_str', 'text'),
 )
+db.propertyManager.img_str.readable = db.propertyManager.img_str.writable = False
 
 db.define_table(
     'reviews',
